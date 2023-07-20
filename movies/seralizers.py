@@ -13,7 +13,7 @@ class RegisterSerializer(serializers.Serializer):
     last_name = serializers.CharField(max_length=255, required=False)
 
 
-class LogonSerializer(serializers.Serializer):
+class LoginSerializer(serializers.Serializer):
     """ login serializer """
     username = serializers.CharField(max_length=255)
     password = serializers.CharField(max_length=255)
@@ -49,16 +49,8 @@ class DateValidation:
             raise ValidationError('Date can not be from the future')
 
 
-class UniqueTitleValidator:
-    """ validate movie title is unique """
-    def __call__(self, value):
-        if Movie.objects.filter(title=value).exists():
-            raise ValidationError('Movie with this title already exists')
-
-
 class MovieSerializer(serializers.ModelSerializer):
-    """ movie serializer """
-    title = serializers.CharField(validators=[UniqueTitleValidator()])
+    """ movie serializer for all requests except PUT"""
     release_date = serializers.DateField(validators=[DateValidation()])
     genre = GenreSerializerAdding(many=True)
 
@@ -67,8 +59,12 @@ class MovieSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def create(self, data: dict):
-        """ create the Movie object with genres if valid """
+        """ create the Movie object with genres object if valid """
         try:
+            # validating the title:
+            title = data['title']
+            if Movie.objects.filter(title=title).exists():
+                raise ValidationError('Title already exists')
             genres_data = data.pop('genre')  # remove genre from data to clean the genre data
             movie = Movie.objects.create(**data)
             for genre in genres_data:
@@ -82,6 +78,11 @@ class MovieSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         """ update the Movie object with genres if valid """
         try:
+            # validating the title:
+            title = validated_data["title"]
+            existing_movie = Movie.objects.filter(title=title)
+            if existing_movie.exists() and existing_movie[0].id != instance.id:
+                raise ValidationError('Title already exists')
             genres_data = validated_data.pop('genre')   # remove genre from data to clean the genre data
             instance = super().update(instance, validated_data)
             for genre_data in genres_data:
@@ -91,6 +92,5 @@ class MovieSerializer(serializers.ModelSerializer):
             return instance
         except Genre.DoesNotExist:
             return {"error": "genre is invalid"}
-
 
 

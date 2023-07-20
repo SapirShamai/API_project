@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Movie, Genre
 from .seralizers import MovieSerializer, GenreSerializerCreating, GenreSerializerAdding,\
-    LogonSerializer, RegisterSerializer
+    LoginSerializer, RegisterSerializer
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
@@ -31,7 +31,7 @@ class Login(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        serializer = LogonSerializer(data=request.data)
+        serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
             username = serializer.data.get('username')
             password = serializer.data.get('password')
@@ -44,6 +44,7 @@ class Login(APIView):
 
 
 class MoviesListCreate(APIView):
+    """ get, post for movie """
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAdminOrReadOnly]
 
@@ -63,6 +64,7 @@ class MoviesListCreate(APIView):
 
 
 class MovieDetailsEditDelete(APIView):
+    """ get, put, delete for movie """
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAdminOrReadOnly]
 
@@ -117,6 +119,7 @@ class SearchMovie(APIView):
 
 
 class GetCreateMovieGenres(APIView):
+    """ get, post for genre """
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAdminOrReadOnly]
 
@@ -137,6 +140,7 @@ class GetCreateMovieGenres(APIView):
 
 
 class GenreDetailsEditDelete(APIView):
+    """ get, put, delete for genre """
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAdminOrReadOnly]
 
