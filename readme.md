@@ -35,7 +35,7 @@ The Movie API is a web-based application that serves as a backend for movie-rela
 
 To get started, follow these steps:
 
-1. Clone the project repository to your local machine.
+1. Clone the project repository to your local machine, make sure to set up virtual environment.
 2. Install the required dependencies using `pip install -r requirements.txt`.
 3. Set up the database or use Django default database and run migrations using`python manage.py makemigrations` and  `python manage.py migrate`.
 4. Start the development server using `python manage.py runserver`.
