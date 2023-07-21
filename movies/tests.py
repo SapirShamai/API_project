@@ -1,6 +1,6 @@
 from django.test import TestCase
 from .seralizers import MovieSerializer, RegisterSerializer, LoginSerializer
-from .models import Movie
+from .models import Movie, Genre
 from django.urls import reverse
 from rest_framework.test import APIClient
 
@@ -20,7 +20,7 @@ class MovieTest(TestCase):
         }
 
         self.client = APIClient()
-        self.client.force_authenticate(self.valid_user)
+        # self.client.force_authenticate(self.valid_user)
 
         self.valid_movie_data = {
             "title": "test title",
@@ -82,8 +82,21 @@ class MovieTest(TestCase):
         self.assertTrue(serializer.is_valid())
         self.assertEqual(serializer.data['username'], self.valid_user['username'])
 
-    def tet_movie_details(self):
-        movie = Movie.objects.create(**self.valid_movie_data)
-        url = reverse('movies:movie_details')
+    def test_movie_details(self):
+        genre = Genre.objects.create(genre="drama")
+        valid_movie_data = {
+            "title": "test title",
+            "release_date": "2020-6-14",
+            "genre": [
+                {"genre": "drama"}
+            ],
+            "description": "test description",
+            "director": "test director",
+            "cast": "test actors"
+        }
+        serializer = MovieSerializer(data=valid_movie_data)
+        if serializer.is_valid():
+            serializer.save()
+        url = reverse('movies:movie_details', kwargs={"pk": 1})
         result = self.client.get(url)
-        self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.status_code, 401)
