@@ -47,48 +47,70 @@ Now, you can start exploring the Movie API and managing movie data.
 ### Permissions:
  when a new user registers to the system automatically a token for him is generated, in order to access some of the endpoints the user needs to have the right permission which I also add here in the endpoint examples.
 Make sure to add the Token in the Request Headers with the key: Authorization and the value: Token {add here the token}.
+You can get the Token from the login response or from the admin interface.
+
+**Example Login Response:**
+
+```json
+{
+    "token": string,
+    "username": string
+}
+```
 
 1. View the list of all movies in the database, permission: authenticated users
+   
+**Method:** `GET`
 
-**Endpoint:** `GET /api/movies/`
+**Endpoint:** `/api/movies/`
+
 2. Create a New Movie, permission: admin
 
-**Endpoint:** `POST /api/movies/`
+**Method:** `POST`
+
+**Endpoint:** `/api/movies/`
 
 **Request Body example:**
 ```json
 {
-  "title": "The Avengers",
-  "description": "A team of superheroes comes together to save the world from impending doom.",
-  "release_date": "2012-04-11",
+  "title": string,
+  "description": string,
+  "release_date": string: "yyyy-mm-dd",
   "genres": [
-    {"genre": "action"},
-    {"genre": "adventure"},
-    {"genre": "sci-fi"}
+    {"genre": string},
+    {"genre": string},
   ], 
-  "director": "Joss Whedon",
-  "cast": "Robert Downey Jr., Chris Evans, Scarlett Johansson"
+  "director": string,
+  "cast": string
 }
 ```
 3. Retrieve Movie by ID, permission: authenticated users
 
-**Endpoint:** `GET /api/movie/{movie_id}/`
+**Method:** `GET`
+
+**Endpoint:** `/api/movie/{movie_id}/`
 
 4. Update Movie details/ delete movie from database, permission: admin
 
-**Endpoint:** `PUT/DELETE /api/movie/{movie_id}/`
+**Methods:** `PUT / DELETE`
+
+**Endpoint:** `/api/movie/{movie_id}/`
 
 5. Search Movie by title/genre/director/actor, permission: authenticated users
 
-**Endpoint:** `GET /api/movie/search/?title=the avengers`
+**Method:** `GET`
+
+**Endpoint:** `/api/movie/search/?title=the avengers`
 
 **another example:**
 
-**Endpoint:** `GET /api/movie/search/?genre=action`
+**Endpoint:** `/api/movie/search/?genre=action`
 
 6. View the list of all genres, permission: authenticated uses
 
-**Endpoint** `GET /api/movie/genres/`
+**Method:** `GET`
+
+**Endpoint** `/api/movie/genres/`
 
 **Response example:**
 ```json 
@@ -109,7 +131,9 @@ Make sure to add the Token in the Request Headers with the key: Authorization an
 ```
 7. Create new genre in database, permission: admin
 
-**Endpoint** `POST /api/movie/genres/`
+**Method:** `POST`
+
+**Endpoint** `/api/movie/genres/`
 
 **Request Body example:**
 ```json 
@@ -120,36 +144,44 @@ Make sure to add the Token in the Request Headers with the key: Authorization an
 ```
 8. View genre details by name, permission: authenticated users
 
-**Endpoint** `GET /api/movie/genres/{genre}/`
+**Method:** `GET`
+
+**Endpoint** `/api/movie/genres/{genre}/`
 
 9. Change genre details by name/ delete genre from database, permission: admin
 
-**Endpoint** `PUT/DELETE /api/movie/genres/{genre}/`
+**Methods:** `PUT / DELETE`
+
+**Endpoint** `/api/movie/genres/{genre}/`
 
 10. Register new user to the system, permission: any
 
-**Endpoint** `POST /api/register/`
+**Method:** `POST`
+
+**Endpoint** `/api/register/`
 
 **Request Body example**
 ```json
 {
-    "username": "username",
-    "password": 123,
-    "email": "test@test.com",
-    "first_name": "not required",
-    "last_name": "not required"
+    "username": string,
+    "password": string/int,
+    "email": string,
+    "first_name": string,
+    "last_name": string
 }
 ```
 
 11. Login registered user to the system, permission: any
 
-**Endpoint** `Post /api/login/`
+**Method:** `POST`
+
+**Endpoint** `/api/login/`
 
 **Request Body example**
 ```json
 {
-    "username": "username",
-    "password": 123
+    "username": string,
+    "password": string/int
 }
 ```
 ## Contribution
